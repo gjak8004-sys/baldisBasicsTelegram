@@ -6,20 +6,63 @@
     <title>Unity WebGL Player | Baldi's Basics Classic</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    
+    <!-- 1. ПОДКЛЮЧАЕМ СДК ТЕЛЕГРАМА -->
+    <script src="https://telegram.org"></script>
+
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
     <script>
       var gameInstance = UnityLoader.instantiate("gameContainer", "Build/Новая папка.json", {onProgress: UnityProgress});
+
+      <!-- 2. РАСШИРЯЕМ ОКНО ПРИ СТАРТЕ -->
+      window.Telegram.WebApp.ready();
+      if (window.Telegram.WebApp.requestFullscreen) {
+          window.Telegram.WebApp.requestFullscreen();
+      } else {
+          window.Telegram.WebApp.expand(); 
+      }
     </script>
+    
+    <!-- 3. СТИЛИ ДЛЯ СТРАНИЦЫ (ЧТОБЫ ИГРА БЫЛА НА ВЕСЬ ЭКРАН В ТЕЛЕГЕ) -->
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+      }
+      .webgl-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100vw;
+        max-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      #gameContainer {
+        /* Убираем жесткие 960x600, делаем резиновые пропорции 16:9 */
+        width: 100vw !important; 
+        height: 56.25vw !important; /* 16:9 отношение */
+        max-height: 100vh !important;
+        max-width: 177.78vh !important;
+      }
+      .footer {
+        display: none !important; /* Прячем дефолтный футер Юнити, в Телеге он не нужен */
+      }
+    </style>
   </head>
   <body>
     <div class="webgl-content">
-      <div id="gameContainer" style="width: 960px; height: 600px"></div>
-      <div class="footer">
-        <div class="webgl-logo"></div>
-        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-        <div class="title">Baldi's Basics Classic</div>
-      </div>
+      <div id="gameContainer"></div>
     </div>
   </body>
 </html>
