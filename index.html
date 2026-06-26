@@ -6,25 +6,23 @@
     <title>Unity WebGL Player | Baldi's Basics Classic</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    
-    <!-- 1. ПОДКЛЮЧАЕМ СДК ТЕЛЕГРАМА -->
     <script src="https://telegram.org"></script>
-
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
     <script>
       var gameInstance = UnityLoader.instantiate("gameContainer", "Build/Новая папка.json", {onProgress: UnityProgress});
 
-      <!-- 2. РАСШИРЯЕМ ОКНО ПРИ СТАРТЕ -->
-      window.Telegram.WebApp.ready();
-      if (window.Telegram.WebApp.requestFullscreen) {
-          window.Telegram.WebApp.requestFullscreen();
+      if (window.Telegram && window.Telegram.WebApp) {
+          window.Telegram.WebApp.ready();
+          if (window.Telegram.WebApp.requestFullscreen) {
+              window.Telegram.WebApp.requestFullscreen();
+          } else {
+              window.Telegram.WebApp.expand(); 
+          }
       } else {
-          window.Telegram.WebApp.expand(); 
+          console.log("Игра запущена вне Телеграма, пропускаем расширение окна.");
       }
     </script>
-    
-    <!-- 3. СТИЛИ ДЛЯ СТРАНИЦЫ (ЧТОБЫ ИГРА БЫЛА НА ВЕСЬ ЭКРАН В ТЕЛЕГЕ) -->
     <style>
       body, html {
         margin: 0;
@@ -49,14 +47,13 @@
         align-items: center;
       }
       #gameContainer {
-        /* Убираем жесткие 960x600, делаем резиновые пропорции 16:9 */
         width: 100vw !important; 
-        height: 56.25vw !important; /* 16:9 отношение */
+        height: 56.25vw !important; 
         max-height: 100vh !important;
         max-width: 177.78vh !important;
       }
       .footer {
-        display: none !important; /* Прячем дефолтный футер Юнити, в Телеге он не нужен */
+        display: none !important; 
       }
     </style>
   </head>
