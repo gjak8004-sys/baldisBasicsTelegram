@@ -12,16 +12,27 @@
     <script>
       var gameInstance = UnityLoader.instantiate("gameContainer", "Build/Новая папка.json", {onProgress: UnityProgress});
 
-      if (window.Telegram && window.Telegram.WebApp) {
-          window.Telegram.WebApp.ready();
-          if (window.Telegram.WebApp.requestFullscreen) {
-              window.Telegram.WebApp.requestFullscreen();
-          } else {
-              window.Telegram.WebApp.expand(); 
+      window.RequestTelegramData = function() {
+          if (window.Telegram && window.Telegram.WebApp) {
+              window.Telegram.WebApp.ready();
+              if (window.Telegram.WebApp.requestFullscreen) {
+                  window.Telegram.WebApp.requestFullscreen();
+              } else {
+                  window.Telegram.WebApp.expand(); 
+              }
+              var user = window.Telegram.WebApp.initDataUnsafe.user;
+              if (user) {
+                  var username = user.username || user.first_name || "Игрок";
+                  gameInstance.SendMessage('TelegramManager', 'SetUsername', username);
+              }
           }
-      } else {
-          console.log("Игра запущена вне Телеграма, пропускаем расширение окна.");
-      }
+      };
+
+      window.SendScoreToTelegram = function(score) {
+          if (window.Telegram && window.Telegram.WebApp) {
+              window.Telegram.WebApp.sendData(JSON.stringify({ action: "add_score", points: score }));
+          }
+      };
     </script>
     <style>
       body, html {
